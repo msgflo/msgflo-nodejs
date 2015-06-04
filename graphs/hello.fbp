@@ -1,3 +1,0 @@
-# @runtime msgflo
-
-'World' -> NAME helloA(Hello) OUT -> NAME helloB(Hello) OUT -> NAME helloC(Hello)

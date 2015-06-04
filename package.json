@@ -1,7 +1,7 @@
 {
-  "name": "msgflo",
-  "description": "Polyglot FBP runtime based on message queues",
-  "version": "0.3.1",
+  "name": "msgflo-nodejs",
+  "description": "Node.js participant support for MsgFlo",
+  "version": "0.4.0",
   "author": {
     "name": "Jon Nordby",
     "email": "jononor@gmail.com"
@@ -13,7 +13,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "undefined/blob/master/LICENSE-MIT"
+      "url": "https://github.com/the-grid/blob/master/LICENSE"
     }
   ],
   "dependencies": {
@@ -25,12 +25,10 @@
     "debug": "^2.1.2",
     "fbp": "^1.1.2",
     "mqtt": "^1.0.6",
-    "websocket": "^1.0.17",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
     "chai": "~1.9.0",
-    "fbp-protocol": "^0.1.6",
     "grunt": "~0.4.1",
     "grunt-coffeelint": "~0.0.6",
     "grunt-mocha-test": "^0.12.2",
@@ -39,9 +37,6 @@
   },
   "keywords": [],
   "bin": {
-    "msgflo": "./bin/msgflo",
-    "msgflo-dump-message": "./bin/msgflo-dump-message",
-    "msgflo-setup": "./bin/msgflo-setup"
   },
   "scripts": {
     "test": "grunt test"

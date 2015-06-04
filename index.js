@@ -1,2 +1,2 @@
 require('coffee-script/register');
-module.exports = require('./src/msgflo');
+module.exports = require('./src/');
