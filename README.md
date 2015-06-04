@@ -1,7 +1,7 @@
-MsgFlo - Flow-Based Programming with Message Queues [![Build Status](https://travis-ci.org/the-grid/msgflo-nodejs.svg?branch=master)](https://travis-ci.org/the-grid/msgflo-nodejs)
+MsgFlo - Flow-Based Programming with Message Queues [![Build Status](https://travis-ci.org/msgflo/msgflo-nodejs.svg?branch=master)](https://travis-ci.org/msgflo/msgflo-nodejs)
 ===================================================
 
-[MsgFlo](https://github.com/the-grid/msgflo) is a distributed, polyglot FBP (flow-based-programming)
+[MsgFlo](https://github.com/msgflo/msgflo) is a distributed, polyglot FBP (flow-based-programming)
 runtime. It integrates with other FBP tools like the [Flowhub](http://flowhub.io) visual programming IDE.
 
 This library makes it easy to create MsgFlo participants in JavaScript/CoffeScript on node.js.
@@ -51,8 +51,7 @@ A simple participant (CoffeeScript)
 
 ## Debugging
 
-The msgflo executable, as well as the transport/participant library
-uses the [debug NPM module](https://www.npmjs.com/package/debug).
+msgflo-nodejs uses the [debug NPM module](https://www.npmjs.com/package/debug).
 You can enable (all) logging using:
 
     export DEBUG=msgflo*
