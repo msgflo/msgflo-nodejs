@@ -51,8 +51,9 @@ instantiateDefinition = (d, role) ->
 
 class Participant extends EventEmitter
   # @func gets called with inport, , and should return outport, outdata
-  constructor: (@messaging, def, @func, role) ->
-    @messaging = transport.getClient @messaging if typeof messaging == 'string'
+  constructor: (client, def, @func, role) ->
+    client = transport.getClient(client) if typeof client == 'string'
+    @messaging = client
     role = 'unknown' if not role
     @definition = instantiateDefinition def, role
     @running = false

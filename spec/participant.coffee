@@ -1,5 +1,5 @@
 
-msgflo = require '../'
+msgflo_nodejs = require '../'
 participants = require './fixtures/participants'
 
 chai = require 'chai' unless chai
@@ -27,7 +27,7 @@ describe 'Participant', ->
     describe 'running data', ->
       messages = []
       beforeEach (done) ->
-        broker = msgflo.transport.getBroker address
+        broker = msgflo_nodejs.transport.getBroker address
         broker.connect (err) ->
           chai.expect(err).to.be.a 'null'
           source.start done
@@ -38,7 +38,7 @@ describe 'Participant', ->
         onOutput = (msg) ->
           messages.push msg
           done() if messages.length == 3
-        observer = msgflo.transport.getClient address
+        observer = msgflo_nodejs.transport.getClient address
         observer.connect (err) ->
           chai.expect(err).to.be.a 'null'
           port = source.definition.outports[0] # out

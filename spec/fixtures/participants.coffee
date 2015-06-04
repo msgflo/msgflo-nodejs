@@ -1,8 +1,7 @@
 
 chance = require 'chance'
 
-msgflo = require '../..'
-
+msgflo_nodejs = require '../..'
 
 HelloParticipant = (client, role) ->
 
@@ -20,7 +19,7 @@ HelloParticipant = (client, role) ->
     ]
   process = (inport, indata, callback) ->
     return callback 'out', null, "Hello " + indata
-  return new msgflo.participant.Participant client, definition, process, role
+  return new msgflo_nodejs.participant.Participant client, definition, process, role
 
 exports.Hello = (c, i) -> new HelloParticipant c, i
 
@@ -53,7 +52,7 @@ FooSourceParticipant = (client, role) ->
     else
         @interval = setInterval sayFoo, indata
 
-  return new msgflo.participant.Participant client, definition, process, role
+  return new msgflo_nodejs.participant.Participant client, definition, process, role
 
 exports.FooSource = (c, i) -> new FooSourceParticipant c, i
 
@@ -78,7 +77,7 @@ DevNullParticipant = (client, role) ->
     return unless inport == 'drop'
     return send 'dropped', null, indata
 
-  return new msgflo.participant.Participant client, definition, process, role
+  return new msgflo_nodejs.participant.Participant client, definition, process, role
 
 exports.DevNullSink = (c, i) -> new DevNullParticipant c, i
 exports.Drop = exports.DevNullSink

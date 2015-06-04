@@ -10,7 +10,8 @@ supportsScheme = (scheme) ->
 exports.getClient = (address, options) ->
   scheme = address.split('://')[0]
   throw new Error 'Unsupported scheme: ' + scheme if not supportsScheme scheme
-  return new transports[scheme].Client address, options
+  client = new transports[scheme].Client address, options
+  return client
 
 exports.getBroker = (address, options) ->
   scheme = address.split('://')[0]

@@ -3,7 +3,6 @@ chai = require 'chai' unless chai
 path = require 'path'
 async = require 'async'
 
-Coordinator = require('../src/coordinator').Coordinator
 transport = require '../src/transport'
 common = require '../src/common'
 
