@@ -11,6 +11,38 @@ EventEmitter = require('events').EventEmitter
 uuid = require 'uuid'
 fbp = require 'fbp'
 
+try
+  nr = require 'newrelic'
+catch e
+  debug 'New Relic not enabled', e.toString()
+
+class Transactions
+  constructor: (@name) ->
+    @transactions = {}
+
+  open: (id, port) ->
+    return if not nr?
+    @transactions[id] =
+      id: id
+      start: Date.now()
+      inport: port
+
+  close: (id, port) ->
+    return if not nr?
+    transaction = @transactions[id]
+    if transaction
+      duration = Date.now()-transaction.start
+      event =
+        role: @name
+        inport: transaction.inport
+        outport: port
+        duration: duration
+      name = 'MsgfloJobCompleted'
+      nr.recordCustomEvent name, event
+      debug 'recorded event', name, event
+      delete @transactions[id]
+
+
 random = new chance.Chance 10202
 
 findPort = (def, type, portName) ->
@@ -57,6 +89,7 @@ class Participant extends EventEmitter
     role = 'unknown' if not role
     @definition = instantiateDefinition def, role
     @running = false
+    @_transactions = new Transactions role
 
   start: (callback) ->
     @messaging.connect (err) =>
@@ -104,7 +137,10 @@ class Participant extends EventEmitter
 
       callFunc = (msg) =>
         debug 'got msg from queue', def.queue
+        msgid = uuid.v4() # need something cross-transport, only AMQP has deliveryTag
+        @_transactions.open msgid, def.id
         @func def.id, msg.data, (outport, err, data) =>
+          @_transactions.close msgid, outport
           return @messaging.nackMessage msg if err
           @onResult outport, data, (err) =>
             return @messaging.nackMessage msg if err
