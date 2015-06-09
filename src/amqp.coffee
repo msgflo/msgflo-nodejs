@@ -48,16 +48,17 @@ class Client extends interfaces.MessagingClient
     queueOptions =
       deadLetterExchange: 'dead-'+queueName # if not existing, messages will be dropped
     exchangeOptions = {}
+    exchangeName = queueName
     if type == 'inqueue'
-      @channel.assertQueue queueName, queueOptions, callback
-    else
-      exchangeName = queueName
-      @channel.assertExchange exchangeName, 'fanout', exchangeOptions, (err) =>
-        return callback err if err
-        # HACK: to make inqueue==outqueue work:
-        @channel.assertQueue queueName, queueOptions, (err) =>
+      @channel.assertQueue queueName, queueOptions, (err) =>
+        # HACK: to make inqueue==outqueue work without binding.
+        # Has side-effect of creating an implicit exchange.
+        # Better than implicit queue, since a queue holds messages forever if noone is subscribed
+        @channel.assertExchange exchangeName, 'fanout', exchangeOptions, (err) =>
           return callback err if err
           @channel.bindQueue exchangeName, queueName, '', {}, callback
+    else
+      @channel.assertExchange exchangeName, 'fanout', exchangeOptions, callback
 
   removeQueue: (type, queueName, callback) ->
     debug 'remove queue', type, queueName
@@ -65,9 +66,7 @@ class Client extends interfaces.MessagingClient
       @channel.deleteQueue queueName, {}, callback
     else
       exchangeName = queueName
-      @channel.deleteExchange exchangeName, {}, (err) =>
-        return callback err if err
-        @channel.deleteQueue queueName, {}, callback
+      @channel.deleteExchange exchangeName, {}, callback
 
   ## Sending/Receiving messages
   sendTo: (type, name, message, callback) ->

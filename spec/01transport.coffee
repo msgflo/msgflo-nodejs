@@ -118,6 +118,20 @@ transportTests = (type) ->
       clientA.connect (err) ->
         done err
 
+  describe 'outqueue without subscribers', ->
+    it 'sending should not error', (done) ->
+      payload = { foo: 'bar91' }
+      outQueue = 'myoutqueue3344'
+      createConnectClients address, ['sender'], (err, clients) ->
+        createQueues [
+          [ clients.sender, 'outqueue', outQueue ]
+        ], (err) ->
+          chai.expect(err).to.not.exist
+
+          clients.sender.sendToQueue outQueue, payload, (err) ->
+            chai.expect(err).to.not.exist
+            done()
+
   describe 'inqueue==outqueue without binding', ->
     it 'sending should be received on other end', (done) ->
       payload = { foo: 'bar91' }
@@ -186,7 +200,7 @@ transportTests = (type) ->
 
             clients.receiver.subscribeToQueue inQueue, onReceive, (err) ->
               chai.expect(err).to.be.a 'null'
-            clients.sender.sendToQueue outQueue, payload, (err) ->
+            clients.sender.sendTo 'outqueue', outQueue, payload, (err) ->
               chai.expect(err).to.be.a 'null'
 
 
