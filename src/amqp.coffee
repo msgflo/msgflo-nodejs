@@ -70,6 +70,7 @@ class Client extends interfaces.MessagingClient
 
   ## Sending/Receiving messages
   sendTo: (type, name, message, callback) ->
+    return callback new Error 'msgflo.amqp.sendTo():  Not connected' if not @channel
     # queue must exists
     data = new Buffer JSON.stringify message
     showLimit = 80
@@ -88,6 +89,7 @@ class Client extends interfaces.MessagingClient
 
 
   subscribeToQueue: (queueName, handler, callback) ->
+    return callback new Error 'msgflo.amqp.subscribeToQueue():  Not connected' if not @channel
     debug 'subscribe', queueName
     # queue must exists
     deserialize = (message) =>
@@ -107,11 +109,13 @@ class Client extends interfaces.MessagingClient
 
   ## ACK/NACK messages
   ackMessage: (message) ->
+    return if not @channel
     fields = message.amqp.fields
     debug 'ACK', fields.routingKey, fields.deliveryTag
     # NOTE: server will only give us new message after this
     @channel.ack message.amqp, false
   nackMessage: (message) ->
+    return if not @channel
     fields = message.amqp.fields
     debug 'NACK', fields.routingKey, fields.deliveryTag
     @channel.nack message.amqp, false, false
