@@ -109,11 +109,11 @@ class Participant extends EventEmitter
   # Send data on inport
   # Normally only used directly for Source type participants
   # For Transform or Sink type, is called on data from input queue
-  send: (inport, data) ->
+  send: (inport, data, callback = -> ) ->
     debug 'got msg from send()', inport
     @func inport, data, (outport, err, data) =>
-      if not err
-        @onResult outport, data, () ->
+      return callback err if err
+      @onResult outport, data, callback
 
   # Emit data on outport
   emitData: (outport, data) ->
