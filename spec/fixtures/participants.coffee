@@ -82,27 +82,6 @@ DevNullParticipant = (client, role) ->
 exports.DevNullSink = (c, i) -> new DevNullParticipant c, i
 exports.Drop = exports.DevNullSink
 
-
-RepeatParticipant = (client, role) ->
-
-  definition =
-    component: 'Repeat'
-    icon: 'file-word-o'
-    label: 'Repeats in data without changes'
-    inports: [
-      id: 'in'
-      type: 'any'
-    ]
-    outports: [
-      id: 'out'
-      type: 'any'
-    ]
-  process = (inport, indata, callback) ->
-    return callback 'out', null, indata
-  return new msgflo.participant.Participant client, definition, process, role
-
-exports.Repeat = (c, i) -> new RepeatParticipant c, i
-
 ErrorIfParticipant = (client, role) ->
 
   definition =
@@ -128,3 +107,5 @@ ErrorIfParticipant = (client, role) ->
   return new msgflo.participant.Participant client, definition, process, role
 
 exports.ErrorIf = (c, i) -> new ErrorIfParticipant c, i
+
+exports.Repeat = require '../../examples/Repeat'

@@ -38,6 +38,7 @@
   },
   "keywords": [],
   "bin": {
+    "msgflo-nodejs": "./bin/msgflo-nodejs"
   },
   "scripts": {
     "test": "grunt test"
