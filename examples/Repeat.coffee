@@ -22,4 +22,4 @@ RepeatParticipant = (client, role) ->
     return callback 'out', null, indata
   return new msgflo.participant.Participant client, definition, process, role
 
-module.exports = (c, i) -> new RepeatParticipant c, i
+module.exports = RepeatParticipant

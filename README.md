@@ -21,9 +21,13 @@ MIT, see [./LICENSE](./LICENSE)
 
 ## Usage
 
+Add as an NPM dependency
+
+    npm install --save msgflo-nodejs
+
 A simple participant (CoffeeScript)
 
-    msgflo = require 'msgflo'
+    msgflo = require 'msgflo-nodejs'
 
     RepeatParticipant = (client, role) ->
       definition =
@@ -42,12 +46,19 @@ A simple participant (CoffeeScript)
         return callback 'out', null, indata
       return new msgflo.participant.Participant client, definition, process, role
 
-    client =  msgflo.transport.getClient 'amqp://localhost'
-    worker = new RepeatParticipant client, 'repeater'
+    client = msgflo.transport.getClient 'amqp://localhost'
+    worker = RepeatParticipant client, 'repeater'
     worker.start (err) ->
       throw err if err
       console.log 'Worker started'
 
+If you expose the participant factory function ([examples/Repeat.coffee](./examples/Repeat.coffee))
+
+    module.exports = RepeatParticipant
+
+Then you can use the `msgflo-nodejs` exectutable to start participant
+
+    msgflo-nodejs --name repeater ./examples/Repeat.coffee
 
 ## Debugging
 
