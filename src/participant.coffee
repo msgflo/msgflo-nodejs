@@ -42,7 +42,7 @@ instantiateDefinition = (d, role) ->
 
   id = uuid.v4()
   def.role = role
-  def.id = "#{def.role}-#{id}"
+  def.id = "#{def.role}-#{id}" if not def.id
 
   def.inports = addQueues def.inports, def.role
   def.outports = addQueues def.outports, def.role
