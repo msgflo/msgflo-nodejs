@@ -48,7 +48,7 @@ class Client extends interfaces.MessagingClient
       callback = options
       options = {}
 
-    debug 'create queue', type, queueName
+    debug 'create queue', type, queueName, options
     queueOptions =
       deadLetterExchange: 'dead-'+queueName # if not existing, messages will be dropped
     exchangeOptions = {}
@@ -56,9 +56,9 @@ class Client extends interfaces.MessagingClient
 
     if options.persistent? and not options.persistent
       queueOptions.durable = false
-      queueOptions.autoDelete = false
+      queueOptions.autoDelete = true
       exchangeOptions.durable = false
-      exchangeOptions.autoDelete = false
+      exchangeOptions.autoDelete = true
 
     if type == 'inqueue'
       @channel.assertQueue queueName, queueOptions, (err) =>

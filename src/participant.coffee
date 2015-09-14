@@ -120,7 +120,7 @@ class Participant extends EventEmitter
 
       options = {}
       options.persistent = def.persistent if def.persistent?
-      @messaging.createQueue 'inqueue', def.queue, (err) =>
+      @messaging.createQueue 'inqueue', def.queue, options, (err) =>
         return callback err if err
         @messaging.subscribeToQueue def.queue, callFunc, callback
         debug 'subscribe to', def.queue
