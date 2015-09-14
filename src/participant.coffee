@@ -99,7 +99,10 @@ class Participant extends EventEmitter
   setupPorts: (callback) ->
     setupOutPort = (def, callback) =>
       return callback null if not def.queue
-      @messaging.createQueue 'outqueue', def.queue, callback
+
+      options = {}
+      options.persistent = def.persistent if def.persistent?
+      @messaging.createQueue 'outqueue', def.queue, options, callback
 
     setupInPort = (def, callback) =>
       return callback null if not def.queue
@@ -115,6 +118,8 @@ class Participant extends EventEmitter
             return @messaging.nackMessage msg if err
             @messaging.ackMessage msg if msg
 
+      options = {}
+      options.persistent = def.persistent if def.persistent?
       @messaging.createQueue 'inqueue', def.queue, (err) =>
         return callback err if err
         @messaging.subscribeToQueue def.queue, callFunc, callback
