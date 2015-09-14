@@ -1,7 +1,7 @@
 {
   "name": "msgflo-nodejs",
   "description": "Node.js participant support for MsgFlo",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "author": {
     "name": "Jon Nordby",
     "email": "jononor@gmail.com"
