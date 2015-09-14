@@ -12,7 +12,9 @@ class MessagingSystem
 
   ## Manipulating queues
   # @type: inqueue|outqueue
-  createQueue: (type, queueName, callback) ->
+  # @options:
+  #  persistent: true|false # if broker should persist the queue or not
+  createQueue: (type, queueName, options, callback) ->
     throw new Error 'Not Implemented'
   removeQueue: (type, queueName, callback) ->
     throw new Error 'Not Implemented'

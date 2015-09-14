@@ -43,7 +43,11 @@ class Client extends interfaces.MessagingClient
         return callback err
 
   ## Manipulating queues
-  createQueue: (type, queueName, callback) ->
+  createQueue: (type, queueName, options, callback) ->
+    if not callback
+      callback = options
+      options = {}
+
     debug 'create queue', type, queueName
     queueOptions =
       deadLetterExchange: 'dead-'+queueName # if not existing, messages will be dropped

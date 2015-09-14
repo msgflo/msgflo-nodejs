@@ -28,7 +28,11 @@ class Client extends interfaces.MessagingClient
     return callback err if err
 
   ## Manipulating queues
-  createQueue: (type, queueName, callback) ->
+  createQueue: (type, queueName, options, callback) ->
+    if not callback
+      callback = options
+      options = {}
+
 #    console.log 'client create queue', queueName
     @_assertBroker callback
     @broker.createQueue type, queueName, callback

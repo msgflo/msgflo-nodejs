@@ -30,7 +30,11 @@ class Client extends interfaces.MessagingClient
       return callback err
 
   ## Manipulating queues
-  createQueue: (type, queueName, callback) ->
+  createQueue: (type, queueName, options, callback) ->
+    if not callback
+      callback = options
+      options = {}
+
     # Noop, in MQTT one can send messages on 'topics' at any time
     return callback null
 
