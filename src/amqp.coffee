@@ -53,6 +53,13 @@ class Client extends interfaces.MessagingClient
       deadLetterExchange: 'dead-'+queueName # if not existing, messages will be dropped
     exchangeOptions = {}
     exchangeName = queueName
+
+    if options.persistent? and not options.persistent
+      queueOptions.durable = false
+      queueOptions.autoDelete = false
+      exchangeOptions.durable = false
+      exchangeOptions.autoDelete = false
+
     if type == 'inqueue'
       @channel.assertQueue queueName, queueOptions, (err) =>
         # HACK: to make inqueue==outqueue work without binding.
