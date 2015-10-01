@@ -19,3 +19,12 @@ before_script:
 - npm install -g grunt-cli
 script:
 - npm test
+deploy:
+  provider: npm
+  email: jononor@gmail.com
+  api_key:
+    secure: UrA/ZBFIGo8jBU5Ro7Z/Bvul9ZL0Bt4a0ofqWPhB6GhZwANZWLXG/XI2+JirKsL9QFZcXv2s3CKZa/cui7Avur0IT0CtqmH4nfbP/nPR1HMAs9iZgcAkofe2mBdx0VwlfyvkNpvCHhm6/pxLI81Rm3a/wNWOG4HKTubc7YsnNJF8sqc2iGmd9Uq9/llW7qO6lz/BtvyH/tYIZIAuc6cHmtcxXnbcFzIDvcONfhO1RSxHzgwnfdicmy57syFEF6AbGn1H1x3F9NQUKfxgHxON+8pAkaMAjxnRcdK348otii4xehEFTqcV43G1eNZWLj6ZKpuWF1+p+RAvWkxy1WYDX2l2O1CL9MDzVXGiW4nCbbMKk3tErx+1ua0p9I9pPWpweFhDXvbbATUQ/KZGCv8IjaP/0u7bgtAONtbvH12ltxRoEDoAXqT2N9JI1FJBfECbRga3SAML/h93fGMc53N5bfiQ6XZsuirJT7RYM5eiLoGbdHUZz9cWllQB+8QBo1rq6RW9GEjEVH418zxhB00LTt8NxBfpSRVAbx8GiHOuJ679ORTy2AKxKoGI+xYq2e3U6jSpgTJrpDRzX88V0rwWns3wG1EyjNNbdj1lQrJPKgmhPDdyrIOu0TEXBiSS+HbdNbamCFdnI6mbMHF/wVumsxvh2gTzQYatn0XIbByHSA0=
+  on:
+    tags: true
+    repo: msgflo/msgflo-nodejs
+    branch: nonpersistent-queues
