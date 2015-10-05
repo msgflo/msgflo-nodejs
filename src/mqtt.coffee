@@ -75,7 +75,7 @@ class Client extends interfaces.MessagingClient
     try
       msg = JSON.parse message.toString()
     catch e
-      debug 'JSON parse exception:', e
+      msg = message.toString()
     handlers = @subscribers[topic]
 
     debug 'message', handlers.length, msg != null

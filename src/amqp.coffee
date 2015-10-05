@@ -109,7 +109,7 @@ class Client extends interfaces.MessagingClient
       try
         data = JSON.parse message.content.toString()
       catch e
-        debug 'JSON exception:', e
+        data = message.content.toString()
       out =
         amqp: message
         data: data
