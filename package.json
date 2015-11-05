@@ -25,7 +25,7 @@
     "debug": "^2.1.2",
     "fbp": "^1.1.2",
     "mqtt": "^1.0.6",
-    "newrelic": "1.17.3",
+    "newrelic": "1.23.0",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
