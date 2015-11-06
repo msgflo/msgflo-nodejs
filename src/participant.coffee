@@ -113,9 +113,10 @@ class Participant extends EventEmitter
         @_transactions.open msgid, def.id
         @func def.id, msg.data, (outport, err, data) =>
           @_transactions.close msgid, outport
-          return @messaging.nackMessage msg if err
-          @onResult outport, data, (err) =>
-            return @messaging.nackMessage msg if err
+          debug 'process() error', err.message if err
+          return @messaging.nackMessage msg if err and not data?
+          @onResult outport, data, (sendErr) =>
+            return @messaging.nackMessage msg if err or sendErr
             @messaging.ackMessage msg if msg
 
       options = {}
