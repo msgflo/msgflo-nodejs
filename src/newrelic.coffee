@@ -7,7 +7,7 @@ catch e
   debug 'New Relic not enabled', e.toString()
 
 class Transactions
-  constructor: (@name) ->
+  constructor: (@definition) ->
     @transactions = {}
 
   open: (id, port) ->
@@ -23,7 +23,8 @@ class Transactions
     if transaction
       duration = Date.now()-transaction.start
       event =
-        role: @name
+        role: @definition.role
+        component: @definition.component
         inport: transaction.inport
         outport: port
         duration: duration

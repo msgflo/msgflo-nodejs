@@ -58,7 +58,7 @@ class Participant extends EventEmitter
     @definition = instantiateDefinition def, role
     @running = false
     newrelic = require './newrelic'
-    @_transactions = new newrelic.Transactions role
+    @_transactions = new newrelic.Transactions @definition
 
   start: (callback) ->
     @messaging.connect (err) =>
