@@ -3,6 +3,27 @@ debug = require('debug')('msgflo:routing')
 
 # Used to bind one queue/exchange to another when the Broker
 # of the transport cannot provide this functionality, like on MQTT
+#
+# TODO: split into two pieces
+# a) a Router, which implements message routing
+# with a message-queue based interface for listing and manipulating bindings.
+# b) a Binder mixin for MessageBroker inteface,
+# which sends
+#
+# This allows a single Router to exist in the network. It holds the canonical state of which
+# queues/topics are bound to eachother, and multiple processes can query and manipulate these.
+# Typically this would be hosted on the same machine as the Broker itself, and would have same lifetime.
+#
+# Protocol:
+# (in) /msgrouter/$instance/addbinding      Add a new binding between a source and target topic/queue.
+# (in) /msgrouter/$instance/removebinding   Remove an existing binding between a source and target topic/queue.
+# (out) /msgrouter/$instance/bindings       Full list of current bindings. Emitted on changes, or when requested.
+# (in) /msgrouter/$instance/listbindings    Explicitly request current bindings.
+#
+# The default $instance is 'default'
+# The Router implementation should persist the bindings whenever they change.
+# Upon restarting it should restore the persisted bindings (and emit a signal).
+#
 bindingId = (f, t) ->
   return "#{f}-#{t}"
 
