@@ -6,9 +6,9 @@ debug = require('debug')('msgflo:routing')
 #
 # TODO: split into two pieces
 # a) a Router, which implements message routing
-# with a message-queue based interface for listing and manipulating bindings.
+# with a message-queue based protocol for listing and manipulating bindings.
 # b) a Binder mixin for MessageBroker inteface,
-# which sends
+# which sends messsages on this protocol for add/removeBinding() and listBindings()
 #
 # This allows a single Router to exist in the network. It holds the canonical state of which
 # queues/topics are bound to eachother, and multiple processes can query and manipulate these.
