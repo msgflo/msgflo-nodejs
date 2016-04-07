@@ -17,3 +17,7 @@ exports.getBroker = (address, options) ->
   scheme = address.split('://')[0]
   throw new Error 'Unsupported scheme: ' + scheme if not supportsScheme scheme
   return new transports[scheme].MessageBroker address, options
+
+# @module: Must have Client and MessageBroker constructors, implementing these interfaces
+export.register = (scheme, module) ->
+  transports[scheme] = module

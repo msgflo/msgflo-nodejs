@@ -67,3 +67,13 @@ You can enable (all) logging using:
 
     export DEBUG=msgflo*
 
+## Supporting other transports
+
+msgflo-nodejs has a transport abstraction layer. So to support a new messaging system,
+implement `Client` and `MessageBroker` [interfaces](./src/interfaces.coffee).
+
+You can then pass these into a `Participant`.
+
+Or you can use `msgflo.transport.register('mytransport', myTransportModule)`, and then `msgflo.transport.getClient('mysystem://somehost:666')`.
+This will also work for specifying `msgflo-nodejs --broker` and for `MSGFLO_BROKER=` environment variable.
+
