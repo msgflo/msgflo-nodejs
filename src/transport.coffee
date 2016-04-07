@@ -19,5 +19,5 @@ exports.getBroker = (address, options) ->
   return new transports[scheme].MessageBroker address, options
 
 # @module: Must have Client and MessageBroker constructors, implementing these interfaces
-export.register = (scheme, module) ->
+exports.register = (scheme, module) ->
   transports[scheme] = module
