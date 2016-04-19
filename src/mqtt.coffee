@@ -45,7 +45,7 @@ class Client extends interfaces.MessagingClient
   ## Sending/Receiving messages
   sendTo: (type, queueName, message, callback) ->
     published = (err, granted) =>
-      debug 'published', err, granted
+      debug 'published', queueName, err, granted
       return callback err if err
       return callback null
     data = JSON.stringify message
