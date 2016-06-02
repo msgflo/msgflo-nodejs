@@ -3,6 +3,15 @@ module.exports = ->
   @initConfig
     pkg: @file.readJSON 'package.json'
 
+    # CoffeeScript compilation
+    coffee:
+      library:
+        expand: true
+        cwd: 'src'
+        src: ['**.coffee']
+        dest: 'lib'
+        ext: '.js'
+
     # BDD tests on Node.js
     mochaTest:
       nodejs:
@@ -36,6 +45,7 @@ module.exports = ->
   @loadNpmTasks 'grunt-mocha-test'
   @loadNpmTasks 'grunt-coffeelint'
   @loadNpmTasks 'grunt-shell-spawn'
+  @loadNpmTasks 'grunt-contrib-coffee'
 
   # Our local tasks
   @registerTask 'fbp-test', [
@@ -44,8 +54,7 @@ module.exports = ->
     'shell:msgflo:kill'
   ]
 
-  @registerTask 'build', 'Build the chosen target platform', (target = 'all') =>
-    # nothing
+  @registerTask 'build', 'Build the chosen target platform', ['coffee']
 
   @registerTask 'test', 'Build and run automated tests', (target = 'all') =>
     @task.run 'coffeelint'

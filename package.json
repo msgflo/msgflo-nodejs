@@ -19,7 +19,6 @@
   "dependencies": {
     "async": "^0.9.0",
     "chance": "^0.7.3",
-    "coffee-script": "^1.8.0",
     "commander": "^2.6.0",
     "debug": "^2.1.2",
     "fbp": "^1.1.2",
@@ -28,13 +27,15 @@
   },
   "devDependencies": {
     "amqplib": "^0.3.0",
-    "mqtt": "1.4.x",
     "chai": "~1.9.0",
     "grunt": "~0.4.1",
+    "coffee-script": "^1.8.0",
     "grunt-coffeelint": "~0.0.6",
+    "grunt-contrib-coffee": "^1.0.0",
     "grunt-mocha-test": "^0.12.2",
     "grunt-shell-spawn": "^0.3.1",
-    "mocha": "~1.21.0"
+    "mocha": "~1.21.0",
+    "mqtt": "1.4.x"
   },
   "keywords": [],
   "bin": {
