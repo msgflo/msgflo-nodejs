@@ -1,9 +1,13 @@
 
-amqp = require 'amqplib/callback_api'
 debug = require('debug')('msgflo:amqp')
 async = require 'async'
-
 interfaces = require './interfaces'
+
+try
+  amqp = require 'amqplib/callback_api'
+catch e
+  amqp = e
+
 
 class Client extends interfaces.MessagingClient
   constructor: (@address, @options={}) ->
@@ -14,6 +18,9 @@ class Client extends interfaces.MessagingClient
   ## Broker connection management
   connect: (callback) ->
     debug 'connect', @address
+    if amqp.message
+      return callback amqp
+
     amqp.connect @address, (err, conn) =>
       debug 'connected', err
       return callback err if err

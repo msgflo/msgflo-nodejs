@@ -1,9 +1,12 @@
 
 debug = require('debug')('msgflo:mqtt')
-mqtt = require 'mqtt'
-
 interfaces = require './interfaces'
 routing = require './routing'
+
+try
+  mqtt = require 'mqtt'
+catch e
+  mqtt = e
 
 class Client extends interfaces.MessagingClient
   constructor: (@address, @options) ->
@@ -12,6 +15,9 @@ class Client extends interfaces.MessagingClient
 
   ## Broker connection management
   connect: (callback) ->
+    if mqtt.message
+      return callback mqtt
+
     @client = mqtt.connect @address
     onConnected = (err) =>
       debug 'connected'
