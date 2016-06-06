@@ -1,5 +1,4 @@
-MsgFlo - Flow-Based Programming with Message Queues [![Build Status](https://travis-ci.org/msgflo/msgflo-nodejs.svg?branch=master)](https://travis-ci.org/msgflo/msgflo-nodejs)
-===================================================
+# msgflo-nodejs [![Build Status](https://travis-ci.org/msgflo/msgflo-nodejs.svg?branch=master)](https://travis-ci.org/msgflo/msgflo-nodejs)
 
 [MsgFlo](https://github.com/msgflo/msgflo) is a distributed, polyglot FBP (flow-based-programming)
 runtime. It integrates with other FBP tools like the [Flowhub](http://flowhub.io) visual programming IDE.
