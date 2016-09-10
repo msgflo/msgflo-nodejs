@@ -40,16 +40,28 @@ class Binder
     return callback null if @bindings[id] or from == to
 
     handler = (msg) =>
+      binding = @bindings[id]
+      return if not binding?.enabled
       debug 'edge message', msg
       @transport.sendTo 'outqueue', to, msg.data, (err) ->
         throw err if err
     @transport.subscribeToQueue from, handler, (err) =>
       return callback err if err
-      @bindings[id] = handler
+      @bindings[id] =
+        handler: handler
+        enabled: true
       return callback null
 
-  removeBinding: (binding, callback) -> # FIXME: implement
-    debug 'Binder.removeBinding', binding
+  removeBinding: (binding, callback) ->
+    from = binding.src
+    to = binding.tgt
+    id = bindingId from, to
+    debug 'Binder.removeBinding', binding, id
+    binding = @bindings[id]
+    return callback new Error "Binding does not exist" if not binding
+    binding.enabled = false
+    #FIXME: add an unsubscribeQueue to Client/transport, and use that
+    return callback null
 
   listBindings: (callback) ->
     debug 'Binder.listBindings'
