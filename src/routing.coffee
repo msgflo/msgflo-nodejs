@@ -63,8 +63,9 @@ class Binder
     #FIXME: add an unsubscribeQueue to Client/transport, and use that
     return callback null
 
-  listBindings: (callback) ->
+  listBindings: (callback) ->  # FIXME: implement
     debug 'Binder.listBindings'
+    return callback null, []
 
 
 exports.Binder = Binder
