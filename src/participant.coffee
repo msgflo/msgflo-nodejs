@@ -140,39 +140,6 @@ class Participant extends EventEmitter
       debug 'registered', err
       return callback err
 
-  # Sets up queues to match those defined in graph
-  connectGraphEdges: (graph) ->
-    console.log 'WARN: msgflo.Participant::connectGraphEdges() is deprecated. Use msgflo.setup.setupBindings() instead'
-    processName = @definition.role
-
-    # If there are outbound connections
-    # Set the output queue to equal to the input queue of the target
-    for conn in graph.connections
-      if conn.src?.process == processName
-        # WARN: assumes the queue naming convention,
-        # as we don't have access to the definition of target participant
-        # altenative would be to instantiate whole network,
-        # and in worker case only run one participant?
-        # using exchanges for the outports and binding to inports might also solve it
-        tgtQueue = "#{conn.tgt.process}.#{conn.tgt.port.toUpperCase()}"
-        ports = @definition.outports.filter (p) -> return p.id == conn.src.port
-        ports[0].queue = tgtQueue
-
-  connectGraphEdgesFile: (filepath, callback) ->
-    console.log 'WARN: msgflo.Participant::connectGraphEdgesFile() is deprecated. Use msgflo.setup.setupBindings() instead'
-    ext = path.extname filepath
-    fs.readFile filepath, { encoding: 'utf-8' }, (err, contents) =>
-      return callback err if err
-      try
-        if ext == '.fbp'
-          graph = fbp.parse contents
-        else
-          graph = JSON.parse contents
-        @connectGraphEdges graph
-      catch e
-        return callback e
-      return callback null
-
 # TODO: consider making component api a bit more like NoFlo.WirePattern
 #
 # inputs = { portA: { data: dataA1, groups: ['A', '1'] }, portB: { data: B1 } }
