@@ -19,6 +19,12 @@ class Client extends interfaces.MessagingClient
       return callback mqtt
 
     @client = mqtt.connect @address
+    @client.on 'error', (err) =>
+      debug 'error', err
+    @client.on 'reconnect', () =>
+      debug 'reconnect'
+    @client.on 'offline', () =>
+      debug 'offline'
     onConnected = (err) =>
       debug 'connected'
       @client.on 'message', (topic, message) =>
@@ -29,6 +35,9 @@ class Client extends interfaces.MessagingClient
   disconnect: (callback) ->
     @client.removeAllListeners 'message'
     @client.removeAllListeners 'connect'
+    @client.removeAllListeners 'reconnect'
+    @client.removeAllListeners 'offline'
+    @client.removeAllListeners 'error'
     @subscribers = {}
     @client.end (err) =>
       debug 'disconnected'
