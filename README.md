@@ -71,8 +71,10 @@ You can enable (all) logging using:
 msgflo-nodejs has a transport abstraction layer. So to support a new messaging system,
 implement `Client` and `MessageBroker` [interfaces](./src/interfaces.coffee).
 
-You can then pass these into a `Participant`.
+You can then pass the Client instance into a `Participant`.
 
-Or you can use `msgflo.transport.register('mytransport', myTransportModule)`, and then `msgflo.transport.getClient('mysystem://somehost:666')`.
-This will also work for specifying `msgflo-nodejs --broker` and for `MSGFLO_BROKER=` environment variable.
+Or you can register a new transport using `msgflo.transport.register('mytransport', myTransportModule)`.
+Then you can get a Client instance using `msgflo.transport.getClient('mytransport://somehost:666')`.
+This has the advantage of also working when specifying the broker URL using
+`msgflo-nodejs --broker` or `MSGFLO_BROKER=` environment variable.
 
