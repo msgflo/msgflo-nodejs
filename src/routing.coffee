@@ -42,7 +42,7 @@ class Binder
     handler = (msg) =>
       binding = @bindings[id]
       return if not binding?.enabled
-      debug 'edge message', msg
+      debug 'edge message', from, to, msg
       @transport.sendTo 'outqueue', to, msg.data, (err) ->
         throw err if err
     @transport.subscribeToQueue from, handler, (err) =>
