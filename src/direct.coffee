@@ -102,7 +102,7 @@ class MessageBroker extends interfaces.MessageBroker
 
   ## Sending/Receiving messages
   sendTo: (type, queueName, message, callback) ->
-#    console.log 'broker sendToQueue', queueName, Object.keys(@queues), @queues[queueName]
+    debug 'broker sendTo', queueName
     @queues[queueName].send message
     return callback null
 
