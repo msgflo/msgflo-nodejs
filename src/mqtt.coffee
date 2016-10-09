@@ -19,17 +19,27 @@ class Client extends interfaces.MessagingClient
       return callback mqtt
 
     @client = mqtt.connect @address
-    @client.on 'error', (err) =>
-      debug 'error', err
+
+    # debug
     @client.on 'reconnect', () =>
       debug 'reconnect'
     @client.on 'offline', () =>
       debug 'offline'
-    onConnected = (err) =>
+
+    @client.on 'error', (err) =>
+      debug 'error', err
+      if callback
+        callback err
+        callback = null
+        return
+    onConnected = (connack) =>
       debug 'connected'
       @client.on 'message', (topic, message) =>
         @_onMessage topic, message
-      return callback err
+      if callback
+        callback null
+        callback = null
+        return
     @client.once 'connect', onConnected
 
   disconnect: (callback) ->
