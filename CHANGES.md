@@ -1,5 +1,9 @@
 
-# msgflo-nodejs 0.7.0, 09.10.2016
+# msgflo-nodejs 0.7.2, 09.10.2016
+
+* MQTT: Fix compatibility with newer versions of library (> 1.4.x)
+
+# msgflo-nodejs 0.7.1, 09.10.2016
 
 * Client/AMQP/MQTT: Remove deprecated `sendToQueue()`.
 
