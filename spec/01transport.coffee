@@ -64,7 +64,7 @@ createBindQueues = (broker, queueMapping, callback) ->
 sendPackets = (packets, callback) ->
   send = (p, cb) ->
     [client, queue, data] = p
-    client.sendToQueue queue, data, cb
+    client.sendTo 'outqueue', queue, data, cb
 
   async.map packets, send, callback
 
@@ -128,7 +128,7 @@ transportTests = (type) ->
         ], (err) ->
           chai.expect(err).to.not.exist
 
-          clients.sender.sendToQueue outQueue, payload, (err) ->
+          clients.sender.sendTo 'outqueue', outQueue, payload, (err) ->
             chai.expect(err).to.not.exist
             done()
 
@@ -149,7 +149,7 @@ transportTests = (type) ->
 
           clients.receiver.subscribeToQueue sharedQueue, onReceive, (err) ->
             chai.expect(err).to.be.a 'null'
-          clients.sender.sendToQueue sharedQueue, payload, (err) ->
+          clients.sender.sendTo 'outqueue', sharedQueue, payload, (err) ->
             chai.expect(err).to.be.a 'null'
 
 
@@ -173,7 +173,7 @@ transportTests = (type) ->
 
             clients.receiver.subscribeToQueue sharedQueue, onReceive, (err) ->
               chai.expect(err).to.be.a 'null'
-            clients.sender.sendToQueue sharedQueue, payload, (err) ->
+            clients.sender.sendTo 'outqueue', sharedQueue, payload, (err) ->
               chai.expect(err).to.be.a 'null'
 
 
@@ -293,7 +293,7 @@ transportTests = (type) ->
               handlers.push [ clients[name], name, onReceives[name] ]
             subscribeData handlers, (err) ->
               chai.expect(err).to.not.exist
-              clients.sender.sendToQueue outQueue2, {data: 'ident'}, (err) ->
+              clients.sender.sendTo 'outqueue', outQueue2, {data: 'ident'}, (err) ->
                 chai.expect(err).to.not.exist
 
   describeIfRoundRobinSupport 'Roundrobin binding', ->

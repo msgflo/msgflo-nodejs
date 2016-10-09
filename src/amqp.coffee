@@ -146,7 +146,7 @@ class Client extends interfaces.MessagingClient
       payload: part
     @channel.assertQueue 'fbp'
     data = new Buffer JSON.stringify msg
-    @channel.sendToQueue 'fbp', data
+    @channel.sendTo 'inqueue', 'fbp', data
     return callback null
 
 class MessageBroker extends Client

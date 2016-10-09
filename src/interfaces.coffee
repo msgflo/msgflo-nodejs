@@ -20,13 +20,9 @@ class MessagingSystem
     throw new Error 'Not Implemented'
 
   ## Sending/Receiving messages
+  # queueName must be created beforehand, and be of correct type
   sendTo: (type, name, message, callback) ->
     throw new Error 'Not Implemented'
-
-  # queueName must be created beforehand, and be of correct type
-  sendToQueue: (queueName, message, callback) ->
-    console.log 'WARN: sendToQueue is deprecated. Use sendTo() instead'
-    @sendTo 'outqueue', queueName, message, callback
 
   # handler must call ackMessage() on succesful processing of a message
   subscribeToQueue: (queueName, handler, callback) ->

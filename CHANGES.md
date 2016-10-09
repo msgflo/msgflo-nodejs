@@ -1,4 +1,14 @@
 
+# msgflo-nodejs 0.7.0, 09.10.2016
+
+* Client/AMQP/MQTT: Remove deprecated `sendToQueue()`.
+
+# msgflo-nodejs 0.6.0, 10.09.2016
+
+* participant: Remove deprecated `connectGraphEdges()` and `connectGraphFile()`.
+Should use `msgflo.setup` instead.
+* MQTT: Implement `removeBinding()`, for removing a connection
+
 # msgflo-nodejs 0.5.0, 06.06.2016
 
 * Allows to register custom transports using `msgflo_nodejs.transport.register()`
