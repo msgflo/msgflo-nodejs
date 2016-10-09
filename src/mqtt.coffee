@@ -106,7 +106,7 @@ class Client extends interfaces.MessagingClient
       protocol: 'discovery'
       command: 'participant'
       payload: part
-    @sendToQueue 'fbp', msg, callback
+    @sendTo 'inqueue', 'fbp', msg, callback
 
 class MessageBroker extends Client
   constructor: (address, options) ->
