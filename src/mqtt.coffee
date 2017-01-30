@@ -100,6 +100,7 @@ class Client extends interfaces.MessagingClient
     try
       msg = JSON.parse message.toString()
     catch e
+      debug 'failed to parse discovery message', e
       msg = message.toString()
     handlers = @subscribers[topic]
 
