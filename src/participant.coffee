@@ -49,9 +49,12 @@ instantiateDefinition = (d, role) ->
 
   return def
 
+defaultDiscoveryPeriod = 60
+defaultDiscoveryPeriod = parseInt process.env.MSGFLO_DISCOVERY_PERIOD if process.env.MSGFLO_DISCOVERY_PERIOD
+
 class Participant extends EventEmitter
   # @func gets called with inport, , and should return outport, outdata
-  constructor: (client, def, @func, role) ->
+  constructor: (client, def, @func, role, options={}) ->
     client = transport.getClient(client) if typeof client == 'string'
     @messaging = client
     role = 'unknown' if not role
@@ -59,6 +62,8 @@ class Participant extends EventEmitter
     @running = false
     newrelic = require './newrelic'
     @_transactions = new newrelic.Transactions @definition
+    @options = options
+    @options.discoveryPeriod = defaultDiscoveryPeriod if not @options.discoveryPeriod # seconds
 
   start: (callback) ->
     @messaging.connect (err) =>
@@ -68,8 +73,14 @@ class Participant extends EventEmitter
       @setupPorts (err) =>
         @running = true
         return callback err if err
-        @register (err) ->
-          return callback err
+        @register (err) =>
+          return callback err if err
+          period = @options.discoveryPeriod*1000/2.2 # try to send 2 messages before deadline
+          setTimeout () =>
+            @register (err) ->
+              console.log 'Could not send discovery message', err if err
+          , period
+          return callback null
 
   stop: (callback) ->
     @running = false
