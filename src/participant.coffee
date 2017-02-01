@@ -49,6 +49,9 @@ instantiateDefinition = (d, role) ->
 
   return def
 
+defaultDiscoveryPeriod = 60
+defaultDiscoveryPeriod = parseInt process.env.MSGFLO_DISCOVERY_PERIOD if process.env.MSGFLO_DISCOVERY_PERIOD
+
 class Participant extends EventEmitter
   # @func gets called with inport, , and should return outport, outdata
   constructor: (client, def, @func, role, options={}) ->
@@ -60,7 +63,7 @@ class Participant extends EventEmitter
     newrelic = require './newrelic'
     @_transactions = new newrelic.Transactions @definition
     @options = options
-    @options.discoveryPeriod = 60 if not @options.discoveryPeriod # seconds
+    @options.discoveryPeriod = defaultDiscoveryPeriod if not @options.discoveryPeriod # seconds
 
   start: (callback) ->
     @messaging.connect (err) =>
