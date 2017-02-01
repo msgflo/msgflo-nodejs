@@ -76,7 +76,7 @@ class Participant extends EventEmitter
         @register (err) =>
           return callback err if err
           period = @options.discoveryPeriod*1000/2.2 # try to send 2 messages before deadline
-          setTimeout () =>
+          setInterval () =>
             @register (err) ->
               console.log 'Could not send discovery message', err if err
           , period
