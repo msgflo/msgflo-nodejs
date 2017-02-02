@@ -105,7 +105,7 @@ class Client extends interfaces.MessagingClient
     handlers = @subscribers[topic]
 
     debug 'message', handlers.length, msg != null
-    return if not msg or not handlers
+    return if not handlers
     out =
       data: msg
       mqtt: message
