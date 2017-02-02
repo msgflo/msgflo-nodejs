@@ -60,6 +60,7 @@ class Binder
     binding = @bindings[id]
     return callback new Error "Binding does not exist" if not binding
     binding.enabled = false
+    delete @bindings[id]
     #FIXME: add an unsubscribeQueue to Client/transport, and use that
     return callback null
 
