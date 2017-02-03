@@ -30,6 +30,7 @@ bindingId = (f, t) ->
 class Binder
   constructor: (@transport) ->
     @bindings = {}
+    @subscriptions = {}
 
   addBinding: (binding, callback) ->
     from = binding.src
@@ -43,8 +44,15 @@ class Binder
       binding = @bindings[id]
       return if not binding?.enabled
       debug 'edge message', from, to, msg
+
+      subscription = @subscriptions[id]
+      if subscription
+        for subCallback in subscription.handlers
+          subCallback(subscription.binding, msg.data)
+
       @transport.sendTo 'outqueue', to, msg.data, (err) ->
         throw err if err
+
     @transport.subscribeToQueue from, handler, (err) =>
       return callback err if err
       @bindings[id] =
@@ -69,9 +77,17 @@ class Binder
     return callback null, []
 
   subscribeData: (binding, datahandler, callback) ->
-    throw new Error 'Not Implemented'
+    id = bindingId binding.src, binding.tgt
+    @subscriptions[id] = { handlers: [], binding: binding } if not @subscriptions[id]
+    @subscriptions[id].handlers.push datahandler
+    return callback null
   unsubscribeData: (binding, datahandler, callback) ->
-    throw new Error 'Not Implemented'
+    id = bindingId binding.src, binding.tgt
+    subscription = @subscriptions[id]
+    handlerIndex = subscription.handlers.indexOf datahandler
+    return callback new Error "Subscription was not found" if handlerIndex == -1
+    subscription.handlers = subscription.handlers.splice(handlerIndex, 1)
+    return callback null
 
 exports.Binder = Binder
 exports.binderMixin = (transport) ->
@@ -80,4 +96,6 @@ exports.binderMixin = (transport) ->
   transport.addBinding = b.addBinding.bind b
   transport.removeBinding = b.removeBinding.bind b
   transport.listBindings = b.listBindings.bind b
+  transport.subscribeData = b.subscribeData.bind b
+  transport.unsubscribeData = b.unsubscribeData.bind b
 
