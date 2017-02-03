@@ -66,6 +66,12 @@ class MessageBroker extends MessagingSystem
   listBindings: (callback) ->
     throw new Error 'Not Implemented'
 
+  # Subscribing to data on a binding
+  subscribeData: (binding, datahandler, callback) ->
+    throw new Error 'Not Implemented'
+  unsubscribeData: (binding, datahandler, callback) ->
+    throw new Error 'Not Implemented'
+
   # Participant registration
   subscribeParticipantChange: (handler) ->
     throw new Error 'Not Implemented'

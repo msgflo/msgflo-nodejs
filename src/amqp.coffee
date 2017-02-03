@@ -190,12 +190,18 @@ class MessageBroker extends Client
 
     else
       return callback new Error 'Unsupported binding type: '+binding.type
-  removeBinding: (binding, callback) ->
-    # FIXME: implement
+
+  removeBinding: (binding, callback) -> # FIXME: implement
     return callback null
-  listBindings: (from, callback) ->
+  listBindings: (from, callback) -> # FIXME: implement
     return callback null, []
-    
+
+  # Data subscriptions
+  subscribeData: (binding, datahandler, callback) -> # TODO: implement
+    return callback null
+  unsubscribeData: (binding, datahandler, callback) -> # TODO: implement
+    return callback null
+
   # Participant registration
   subscribeParticipantChange: (handler) ->
     deserialize = (message) =>

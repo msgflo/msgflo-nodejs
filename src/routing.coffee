@@ -68,6 +68,10 @@ class Binder
     debug 'Binder.listBindings'
     return callback null, []
 
+  subscribeData: (binding, datahandler, callback) ->
+    throw new Error 'Not Implemented'
+  unsubscribeData: (binding, datahandler, callback) ->
+    throw new Error 'Not Implemented'
 
 exports.Binder = Binder
 exports.binderMixin = (transport) ->
