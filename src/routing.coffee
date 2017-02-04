@@ -38,7 +38,7 @@ class Binder
     # TODO: handle non-pubsub types
     id = bindingId from, to
     debug 'Binder.addBinding', binding.type, id
-    return callback null if @bindings[id] or from == to
+    return callback null if @bindings[id] # already exists, avoid duplicate
 
     handler = (msg) =>
       binding = @bindings[id]
@@ -50,8 +50,11 @@ class Binder
         for subCallback in subscription.handlers
           subCallback(subscription.binding, msg.data)
 
-      @transport.sendTo 'outqueue', to, msg.data, (err) ->
-        throw err if err
+      if from != to
+        @transport.sendTo 'outqueue', to, msg.data, (err) ->
+          throw err if err
+      else
+        # same topic/queue, data should appear without our forwarding
 
     @transport.subscribeToQueue from, handler, (err) =>
       return callback err if err
