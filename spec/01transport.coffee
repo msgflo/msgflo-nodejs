@@ -150,8 +150,8 @@ transportTests = (type) ->
 
           clients.receiver.subscribeToQueue sharedQueue, onReceive, (err) ->
             chai.expect(err).to.be.a 'null'
-          clients.sender.sendTo 'outqueue', sharedQueue, payload, (err) ->
-            chai.expect(err).to.be.a 'null'
+            clients.sender.sendTo 'outqueue', sharedQueue, payload, (err) ->
+              chai.expect(err).to.be.a 'null'
 
 
   describe 'inqueue==outqueue with binding', ->
@@ -174,8 +174,8 @@ transportTests = (type) ->
 
             clients.receiver.subscribeToQueue sharedQueue, onReceive, (err) ->
               chai.expect(err).to.be.a 'null'
-            clients.sender.sendTo 'outqueue', sharedQueue, payload, (err) ->
-              chai.expect(err).to.be.a 'null'
+              clients.sender.sendTo 'outqueue', sharedQueue, payload, (err) ->
+                chai.expect(err).to.be.a 'null'
 
 
   describe 'outqueue bound to inqueue', ->
@@ -201,8 +201,8 @@ transportTests = (type) ->
 
             clients.receiver.subscribeToQueue inQueue, onReceive, (err) ->
               chai.expect(err).to.be.a 'null'
-            clients.sender.sendTo 'outqueue', outQueue, payload, (err) ->
-              chai.expect(err).to.be.a 'null'
+              clients.sender.sendTo 'outqueue', outQueue, payload, (err) ->
+                chai.expect(err).to.be.a 'null'
 
 
   describe 'multiple outqueues bound to one inqueue', ->
