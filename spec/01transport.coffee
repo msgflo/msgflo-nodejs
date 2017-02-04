@@ -99,6 +99,7 @@ transportTests = (type) ->
   broker = null
 
   describeIfRoundRobinSupport = if type == 'AMQP' then describe else describe.skip
+  describeIfSubscribeSupport = if type != 'AMQP' then describe else describe.skip
 
   beforeEach (done) ->
     broker = transport.getBroker address
@@ -149,8 +150,8 @@ transportTests = (type) ->
 
           clients.receiver.subscribeToQueue sharedQueue, onReceive, (err) ->
             chai.expect(err).to.be.a 'null'
-          clients.sender.sendTo 'outqueue', sharedQueue, payload, (err) ->
-            chai.expect(err).to.be.a 'null'
+            clients.sender.sendTo 'outqueue', sharedQueue, payload, (err) ->
+              chai.expect(err).to.be.a 'null'
 
 
   describe 'inqueue==outqueue with binding', ->
@@ -173,8 +174,8 @@ transportTests = (type) ->
 
             clients.receiver.subscribeToQueue sharedQueue, onReceive, (err) ->
               chai.expect(err).to.be.a 'null'
-            clients.sender.sendTo 'outqueue', sharedQueue, payload, (err) ->
-              chai.expect(err).to.be.a 'null'
+              clients.sender.sendTo 'outqueue', sharedQueue, payload, (err) ->
+                chai.expect(err).to.be.a 'null'
 
 
   describe 'outqueue bound to inqueue', ->
@@ -200,8 +201,8 @@ transportTests = (type) ->
 
             clients.receiver.subscribeToQueue inQueue, onReceive, (err) ->
               chai.expect(err).to.be.a 'null'
-            clients.sender.sendTo 'outqueue', outQueue, payload, (err) ->
-              chai.expect(err).to.be.a 'null'
+              clients.sender.sendTo 'outqueue', outQueue, payload, (err) ->
+                chai.expect(err).to.be.a 'null'
 
 
   describe 'multiple outqueues bound to one inqueue', ->
@@ -362,6 +363,100 @@ transportTests = (type) ->
         chai.expect(workerData).to.have.length 2
       it 'only NACKed message is sent to deadletter', ->
         chai.expect(received.deadletter).to.eql [ { foo: 'nack'} ]
+
+  describeIfSubscribeSupport 'subscribing to bound topics', ->
+    sendQueue = 'sub-send-36'
+    receiveQueue = 'sub-receive-36'
+    binding = { type:'pubsub', src:sendQueue, tgt:receiveQueue }
+    connectionData = []
+    clients = null
+
+    # Should be a before, but the 'beforeEach' of higher scope are ran afterwards...
+    setup = (done) ->
+      createConnectClients address, ['sender', 'receiver'], (err, c) ->
+        clients = c
+        createQueues [
+          [ clients.receiver, 'inqueue', receiveQueue ]
+          [ clients.sender, 'outqueue', sendQueue ]
+        ], (err) ->
+          chai.expect(err).to.not.exist
+          broker.addBinding binding, (err) ->
+            chai.expect(err).to.be.a 'null'
+            return done null
+
+    it 'should provide data sent on connection', (done) ->
+      payloads =
+        one: { foo: 'sub-96' }
+        two: { bar: 'sub-97' }
+  
+      onData = (bind, data) ->
+        chai.expect(bind.src).to.equal binding.src
+        chai.expect(bind.tgt).to.equal binding.tgt
+        connectionData.push data
+        # wait until we've gotten two packets
+        if connectionData.length == 2
+          [one, two] = connectionData
+          chai.expect(one).to.eql payloads.one
+          chai.expect(two).to.eql payloads.two
+          return done null
+        else if connectionData.length > 2
+          return done new Error "Got more data than expected"
+
+      setup (err) ->
+        return done err if err
+        broker.subscribeData binding, onData, (err) ->
+          return done err if err
+          clients.sender.sendTo 'outqueue', sendQueue, payloads.one, (err) ->
+            return done err if err
+            clients.sender.sendTo 'outqueue', sendQueue, payloads.two, (err) ->
+              return done err if err
+
+  describeIfSubscribeSupport 'subscribing to binding with srcQueue==tgtQueue', ->
+    sendQueue = 'sub-shared-37'
+    receiveQueue = sendQueue
+    binding = { type:'pubsub', src:sendQueue, tgt:receiveQueue }
+    connectionData = []
+    clients = null
+
+    # Should be a before, but the 'beforeEach' of higher scope are ran afterwards...
+    setup = (done) ->
+      createConnectClients address, ['sender', 'receiver'], (err, c) ->
+        clients = c
+        createQueues [
+          [ clients.receiver, 'inqueue', receiveQueue ]
+          [ clients.sender, 'outqueue', sendQueue ]
+        ], (err) ->
+          chai.expect(err).to.not.exist
+          broker.addBinding binding, (err) ->
+            chai.expect(err).to.be.a 'null'
+            return done null
+
+    it 'should provide data sent on connection', (done) ->
+      payloads =
+        one: { foo: 'sub-106' }
+        two: { bar: 'sub-107' }
+
+      onData = (bind, data) ->
+        chai.expect(bind.src).to.equal binding.src
+        chai.expect(bind.tgt).to.equal binding.tgt
+        connectionData.push data
+        # wait until we've gotten two packets
+        if connectionData.length == 2
+          [one, two] = connectionData
+          chai.expect(one).to.eql payloads.one
+          chai.expect(two).to.eql payloads.two
+          return done null
+        else if connectionData.length > 2
+          return done new Error "Got more data than expected"
+
+      setup (err) ->
+        return done err if err
+        broker.subscribeData binding, onData, (err) ->
+          return done err if err
+          clients.sender.sendTo 'outqueue', sendQueue, payloads.one, (err) ->
+            return done err if err
+            clients.sender.sendTo 'outqueue', sendQueue, payloads.two, (err) ->
+              return done err if err
 
 describe 'Transport', ->
   Object.keys(transports).forEach (type) =>
