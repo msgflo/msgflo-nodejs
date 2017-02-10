@@ -1,17 +1,12 @@
 
 common = require './common'
 transport = require './transport'
+newrelic = require './newrelic'
 
-path = require 'path'
-fs = require 'fs'
 debug = require('debug')('msgflo:participant')
-chance = require 'chance'
 async = require 'async'
 EventEmitter = require('events').EventEmitter
 uuid = require 'uuid'
-fbp = require 'fbp'
-
-random = new chance.Chance 10202
 
 findPort = (def, type, portName) ->
   ports = if type == 'inport' then def.inports else def.outports
@@ -60,7 +55,6 @@ class Participant extends EventEmitter
     role = 'unknown' if not role
     @definition = instantiateDefinition def, role
     @running = false
-    newrelic = require './newrelic'
     @_transactions = new newrelic.Transactions @definition
     @options = options
     @options.discoveryPeriod = defaultDiscoveryPeriod if not @options.discoveryPeriod # seconds
