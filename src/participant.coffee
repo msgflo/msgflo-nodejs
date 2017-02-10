@@ -2,16 +2,10 @@
 common = require './common'
 transport = require './transport'
 
-path = require 'path'
-fs = require 'fs'
 debug = require('debug')('msgflo:participant')
-chance = require 'chance'
 async = require 'async'
 EventEmitter = require('events').EventEmitter
 uuid = require 'uuid'
-fbp = require 'fbp'
-
-random = new chance.Chance 10202
 
 findPort = (def, type, portName) ->
   ports = if type == 'inport' then def.inports else def.outports
