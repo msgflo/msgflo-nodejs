@@ -1,6 +1,7 @@
 
 common = require './common'
 transport = require './transport'
+newrelic = require './newrelic'
 
 debug = require('debug')('msgflo:participant')
 async = require 'async'
@@ -54,7 +55,6 @@ class Participant extends EventEmitter
     role = 'unknown' if not role
     @definition = instantiateDefinition def, role
     @running = false
-    newrelic = require './newrelic'
     @_transactions = new newrelic.Transactions @definition
     @options = options
     @options.discoveryPeriod = defaultDiscoveryPeriod if not @options.discoveryPeriod # seconds
