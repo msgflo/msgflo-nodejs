@@ -73,7 +73,7 @@ class MessageBroker extends MessagingSystem
     throw new Error 'Not Implemented'
 
   # Participant registration
-  subscribeParticipantChange: (handler) ->
+  subscribeParticipantChange: (handler, callback) ->
     throw new Error 'Not Implemented'
 
 exports.MessageBroker = MessageBroker

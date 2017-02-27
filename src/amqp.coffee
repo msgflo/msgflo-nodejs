@@ -203,7 +203,12 @@ class MessageBroker extends Client
     return callback null
 
   # Participant registration
-  subscribeParticipantChange: (handler) ->
+  subscribeParticipantChange: (handler, callback) ->
+    defaultCallback = (err) ->
+      if err
+        console.err "Error in msgflo.amqp.subscribeParticipantChange, and no callback added", err
+    callback = defaultCallback if not callback
+
     deserialize = (message) =>
       debug 'receive on fbp', message.fields.deliveryTag
       data = null
@@ -218,6 +223,7 @@ class MessageBroker extends Client
 
     @channel.assertQueue 'fbp'
     @channel.consume 'fbp', deserialize
+    return callback null
 
 exports.Client = Client
 exports.MessageBroker = MessageBroker

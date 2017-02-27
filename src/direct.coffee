@@ -121,9 +121,16 @@ class MessageBroker extends interfaces.MessageBroker
   nackMessage: (message) ->
     return
 
-  subscribeParticipantChange: (handler) ->
+  subscribeParticipantChange: (handler, callback) ->
+    defaultCallback = (err) ->
+      if err
+        console.err "Error in msgflo.direct.subscribeParticipantChange, and no callback added", err
+    callback = defaultCallback if not callback
+
     @createQueue '', 'fbp', (err) =>
-      @subscribeToQueue 'fbp', handler, () ->
+      return callback err if err
+      @subscribeToQueue 'fbp', handler, (err) ->
+        return callback err
 
 exports.MessageBroker = MessageBroker
 exports.Client = Client
