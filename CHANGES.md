@@ -1,4 +1,9 @@
 
+# msgflo-nodejs 0.10.0, 15.03.2017
+
+* Transport: Add interface for listing existing datasubscriptions.
+`MessageBroker.listSubscriptions()`
+
 # msgflo-nodejs 0.9.0, 04.02.2017
 
 * Transport: Add new interface for subscribing to data changes on a binding.
