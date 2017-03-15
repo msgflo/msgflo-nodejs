@@ -94,7 +94,7 @@ class Binder
   listSubscriptions: (callback) ->
     subs = []
     for id, sub of @subscriptions
-      subs.push sub
+      subs.push sub.binding
     return callback null, subs
 
 
