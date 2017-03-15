@@ -91,6 +91,12 @@ class Binder
     return callback new Error "Subscription was not found" if handlerIndex == -1
     subscription.handlers = subscription.handlers.splice(handlerIndex, 1)
     return callback null
+  listSubscriptions: (callback) ->
+    subs = []
+    for id, sub of @subscriptions
+      subs.push sub
+    return callback null, subs
+
 
 exports.Binder = Binder
 exports.binderMixin = (transport) ->
@@ -101,4 +107,5 @@ exports.binderMixin = (transport) ->
   transport.listBindings = b.listBindings.bind b
   transport.subscribeData = b.subscribeData.bind b
   transport.unsubscribeData = b.unsubscribeData.bind b
+  transport.listSubscriptions = b.listSubscriptions.bind b
 
