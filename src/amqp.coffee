@@ -201,6 +201,8 @@ class MessageBroker extends Client
     return callback null
   unsubscribeData: (binding, datahandler, callback) -> # TODO: implement
     return callback null
+  listSubscriptions: (callback) -> # TODO: implement
+    return callback null, []
 
   # Participant registration
   subscribeParticipantChange: (handler) ->
