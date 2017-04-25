@@ -4,6 +4,8 @@ transports =
   mqtt: require './mqtt'
   direct: require './direct'
 
+transports.amqps = transports.amqp
+
 supportsScheme = (scheme) ->
   return scheme in Object.keys transports
 
