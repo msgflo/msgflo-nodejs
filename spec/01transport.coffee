@@ -203,6 +203,48 @@ transportTests = (type) ->
               clients.sender.sendTo 'outqueue', outQueue, payload, (err) ->
                 chai.expect(err).to.be.a 'null'
 
+  describe 'outqueue bound to inqueue then removed', ->
+    it 'sending to inqueue, show up on outqueue', (done) ->
+      payload = { foo: 'bar922' }
+      inQueue = 'inqueue922'
+      outQueue = 'outqueue922'
+      createConnectClients address, ['sender', 'receiver'], (err, clients) ->
+        createQueues [
+          [ clients.receiver, 'inqueue', inQueue ]
+          [ clients.sender, 'outqueue', outQueue ]
+        ], (err) ->
+          chai.expect(err).to.not.exist
+
+          binding = { type:'pubsub', src:outQueue, tgt:inQueue }
+          bindingRemoved = false
+
+          onReceive = (msg) ->
+            if bindingRemoved
+              done new Error "Received data on removed binding"
+              done = null
+              return
+
+            clients.receiver.ackMessage msg
+            chai.expect(msg).to.include.keys 'data'
+            chai.expect(msg.data).to.eql payload
+            bindingRemoved = true
+            broker.removeBinding binding, (err) ->
+              chai.expect(err).to.be.a 'null'
+              clients.sender.sendTo 'outqueue', outQueue, payload, (err) ->
+                chai.expect(err).to.be.a 'null'
+                setTimeout () ->
+                  done null if done
+                  done = null
+                  return
+                , 300
+
+          clients.receiver.subscribeToQueue inQueue, onReceive, (err) ->
+            chai.expect(err).to.be.a 'null'
+          broker.addBinding binding, (err) ->
+            chai.expect(err).to.be.a 'null'
+            clients.sender.sendTo 'outqueue', outQueue, payload, (err) ->
+              chai.expect(err).to.be.a 'null'
+
 
   describe 'multiple outqueues bound to one inqueue', ->
     it 'all sent on outqueues shows up on inqueue', (done) ->

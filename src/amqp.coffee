@@ -197,7 +197,6 @@ class MessageBroker extends Client
           return callback err
 
   addBinding: (binding, callback) ->
-    # TODO: support roundrobin type
     debug 'Broker.addBinding', binding
     if binding.type == 'pubsub'
       @channel.bindQueue binding.tgt, binding.src, '', {}, callback
@@ -234,9 +233,18 @@ class MessageBroker extends Client
     else
       return callback new Error 'Unsupported binding type: '+binding.type
 
-  removeBinding: (binding, callback) -> # FIXME: implement
-    return callback null
+  removeBinding: (binding, callback) ->
+    debug 'Broker.removeBinding', binding
+    if binding.type == 'pubsub'
+      @channel.unbindQueue binding.tgt, binding.src, '', {}, callback
+    else if binding.type == 'roundrobin'
+      return callback new Error "removeBinding() not supported for type='roundrobin'" # TODO:
+    else
+      return callback new Error "Unsupported binding type: #{binding.type}"
+
+
   listBindings: (from, callback) -> # FIXME: implement
+    # NOTE: probably need to use the RabbitMQ HTTP API for this
     return callback null, []
 
   # Data subscriptions
