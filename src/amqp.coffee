@@ -192,7 +192,9 @@ class MessageBroker extends Client
               null
             sub.handler sub.binding, data
 
-        @channel.consume name, onSubscribedQueueData, {}, (err) ->
+        subscribeOptions =
+          noAck: true
+        @channel.consume name, onSubscribedQueueData, subscribeOptions, (err) ->
           debug 'broker created subscription queue', err
           return callback err
 
