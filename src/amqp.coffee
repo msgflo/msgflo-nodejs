@@ -1,13 +1,14 @@
 
 debug = require('debug')('msgflo:amqp')
 async = require 'async'
+uuid = require 'uuid'
+
 interfaces = require './interfaces'
 
 try
   amqp = require 'amqplib/callback_api'
 catch e
   amqp = e
-
 
 class Client extends interfaces.MessagingClient
   constructor: (@address, @options={}) ->
@@ -149,9 +150,51 @@ class Client extends interfaces.MessagingClient
     @channel.sendToQueue 'fbp', data
     return callback null
 
+
+dataSubscriptionQueueName = (id) ->
+  throw new Error("Missing id") if not id
+  return ".msgflo-broker-subscriptions-#{id}"
+
+bindingId = (b) ->
+  return "[#{b.src}]->[#{b.tgt}]"
+
 class MessageBroker extends Client
   constructor: (address, options) ->
     super address, options
+    @options.id = uuid.v4() if not @options.id
+    @subscriptions = {}
+
+  connect: (callback) ->
+    super (err) =>
+      return callback err if err
+      # create queue for data subscriptions
+      name = dataSubscriptionQueueName @options.id
+      options =
+        exclusive: true
+        durable: false
+        autoDelete: true
+      @channel.assertQueue name, options, (err) =>
+        return callback err if err
+        onSubscribedQueueData = (message) =>
+          exchange = message.fields.exchange
+          debug 'broker subscriber got message on exchange', exchange
+          matches = Object.keys(@subscriptions).filter (id) =>
+            sub = @subscriptions[id]
+            # XXX: how to account for which queue the message is for
+            # can we create some identifier when we subscribe?
+            return sub?.binding.src == exchange
+          for id in matches
+            sub = @subscriptions[id]
+            data = message.content
+            try
+              data = JSON.parse message.content.toString()
+            catch e
+              null
+            sub.handler sub.binding, data
+
+        @channel.consume name, onSubscribedQueueData, {}, (err) ->
+          debug 'broker created subscription queue', err
+          return callback err
 
   addBinding: (binding, callback) ->
     # TODO: support roundrobin type
@@ -197,12 +240,32 @@ class MessageBroker extends Client
     return callback null, []
 
   # Data subscriptions
-  subscribeData: (binding, datahandler, callback) -> # TODO: implement
+  subscribeData: (binding, datahandler, callback) ->
+    exchange = binding.src
+    queue = dataSubscriptionQueueName @options.id
+    options =
+      autoDelete: true
+    @channel.bindQueue queue, exchange, '', options, (err) =>
+      return callback err if err
+      id = bindingId binding
+      @subscriptions[id] =
+        binding: binding
+        handler: datahandler
+      return callback null
+
+  unsubscribeData: (binding, datahandler, callback) ->
+    # TODO: also remove the subscription with broker
+    id = bindingId binding
+    delete @subscriptions[id]
     return callback null
-  unsubscribeData: (binding, datahandler, callback) -> # TODO: implement
-    return callback null
-  listSubscriptions: (callback) -> # TODO: implement
-    return callback null, []
+
+  listSubscriptions: (callback) ->
+    # Is there a way to get this information through AMQP?
+    # Or do need to use RabbitMQ HTTP API?
+    subs = []
+    for id, sub of @subscriptions
+      subs.push sub.binding
+    return callback null, subs
 
   # Participant registration
   subscribeParticipantChange: (handler) ->
