@@ -99,7 +99,6 @@ transportTests = (type) ->
   broker = null
 
   describeIfRoundRobinSupport = if type == 'AMQP' then describe else describe.skip
-  describeIfSubscribeSupport = if type != 'AMQP' then describe else describe.skip
 
   beforeEach (done) ->
     broker = transport.getBroker address
@@ -364,7 +363,7 @@ transportTests = (type) ->
       it 'only NACKed message is sent to deadletter', ->
         chai.expect(received.deadletter).to.eql [ { foo: 'nack'} ]
 
-  describeIfSubscribeSupport 'subscribing to bound topics', ->
+  describe 'subscribing to bound topics', ->
     sendQueue = 'sub-send-36'
     receiveQueue = 'sub-receive-36'
     binding = { type:'pubsub', src:sendQueue, tgt:receiveQueue }
@@ -411,7 +410,7 @@ transportTests = (type) ->
             clients.sender.sendTo 'outqueue', sendQueue, payloads.two, (err) ->
               return done err if err
 
-  describeIfSubscribeSupport 'subscribing to binding with srcQueue==tgtQueue', ->
+  describe 'subscribing to binding with srcQueue==tgtQueue', ->
     sendQueue = 'sub-shared-37'
     receiveQueue = sendQueue
     binding = { type:'pubsub', src:sendQueue, tgt:receiveQueue }
