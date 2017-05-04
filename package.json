@@ -17,7 +17,7 @@
     "commander": "^2.6.0",
     "debug": "^2.1.2",
     "fbp": "^1.1.2",
-    "newrelic": "1.36.0",
+    "newrelic": "^1.39.0",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
