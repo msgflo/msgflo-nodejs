@@ -18,6 +18,7 @@ module.exports = ->
         src: ['spec/*.coffee']
         options:
           reporter: 'spec'
+          grep: process.env.TESTS
 
     # Coding standards
     coffeelint:

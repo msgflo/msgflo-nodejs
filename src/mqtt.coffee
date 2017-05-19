@@ -100,11 +100,12 @@ class Client extends interfaces.MessagingClient
     try
       msg = JSON.parse message.toString()
     catch e
+      debug "failed to parse incoming message on #{topic} as JSON", e
       msg = message.toString()
     handlers = @subscribers[topic]
 
     debug 'message', handlers.length, msg != null
-    return if not msg or not handlers
+    return if not handlers
     out =
       data: msg
       mqtt: message

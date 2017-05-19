@@ -37,7 +37,7 @@ class MessagingSystem
 class MessagingClient extends MessagingSystem
 
   # Participant registration
-  registerParticipant: (part) ->
+  registerParticipant: (part, callback) ->
     throw new Error 'Not Implemented'
 
 exports.MessagingClient = MessagingClient
@@ -64,6 +64,14 @@ class MessageBroker extends MessagingSystem
     throw new Error 'Not Implemented'
   # @callback err, [Binding, Binding, ..]
   listBindings: (callback) ->
+    throw new Error 'Not Implemented'
+
+  # Subscribing to data on a binding
+  subscribeData: (binding, datahandler, callback) ->
+    throw new Error 'Not Implemented'
+  unsubscribeData: (binding, datahandler, callback) ->
+    throw new Error 'Not Implemented'
+  listSubscriptions: (callback) ->
     throw new Error 'Not Implemented'
 
   # Participant registration
