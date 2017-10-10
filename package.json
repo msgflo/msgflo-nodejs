@@ -25,7 +25,6 @@
     "chai": "^4.1.0",
     "grunt": "^1.0.1",
     "coffee-script": "^1.8.0",
-    "grunt-coffeelint": "^0.0.6",
     "grunt-contrib-coffee": "^1.0.0",
     "grunt-mocha-test": "^0.13.2",
     "grunt-shell-spawn": "^0.3.1",
