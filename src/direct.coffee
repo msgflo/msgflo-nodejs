@@ -71,6 +71,7 @@ class Client extends interfaces.MessagingClient
 
 class Queue extends EventEmitter
   constructor: () ->
+    super()
 
   send: (msg) ->
     @_emitSend msg
