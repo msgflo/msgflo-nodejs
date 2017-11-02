@@ -14,6 +14,7 @@
   "dependencies": {
     "async": "^2.1.4",
     "chance": "^1.0.4",
+    "coffeescript": "^2.0.2",
     "commander": "^2.6.0",
     "debug": "^3.0.0",
     "fbp": "^1.1.2",
@@ -23,7 +24,6 @@
   "devDependencies": {
     "amqplib": "^0.5.1",
     "chai": "^4.1.0",
-    "coffeescript": "^2.0.2",
     "grunt": "^1.0.1",
     "grunt-contrib-coffee": "^2.0.0",
     "grunt-mocha-test": "^0.13.2",
