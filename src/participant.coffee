@@ -49,7 +49,9 @@ defaultDiscoveryPeriod = parseInt process.env.MSGFLO_DISCOVERY_PERIOD if process
 
 class Participant extends EventEmitter
   # @func gets called with inport, , and should return outport, outdata
-  constructor: (client, def, @func, role, options={}) ->
+  constructor: (client, def, func, role, options={}) ->
+    super()
+    @func = func
     client = transport.getClient(client) if typeof client == 'string'
     @messaging = client
     role = 'unknown' if not role

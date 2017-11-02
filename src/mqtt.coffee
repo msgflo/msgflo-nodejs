@@ -9,7 +9,10 @@ catch e
   mqtt = e
 
 class Client extends interfaces.MessagingClient
-  constructor: (@address, @options) ->
+  constructor: (address, options) ->
+    super address, options
+    @address = address
+    @options = options
     @client = null
     @subscribers = {} # queueName -> [handler1, ...]
 

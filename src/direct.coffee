@@ -9,7 +9,10 @@ brokers = {}
 
 
 class Client extends interfaces.MessagingClient
-  constructor: (@address, @options) ->
+  constructor: (address, options) ->
+    super address, options
+    @address = address
+    @options = options
 #    console.log 'client', @address
     @broker = null
   
@@ -76,7 +79,9 @@ class Queue extends EventEmitter
     @emit 'message', msg
 
 class MessageBroker extends interfaces.MessageBroker
-  constructor: (@address) ->
+  constructor: (address) ->
+    super address
+    @address = address
     routing.binderMixin this
     @queues = {}
 #    console.log 'broker', @address
