@@ -1,10 +1,8 @@
 
 debug = require('debug')('msgflo:newrelic')
 
-try
+if process.env.NEW_RELIC_LICENSE_KEY?
   nr = require 'newrelic'
-catch e
-  debug 'New Relic not enabled', e.toString()
 
 class Transactions
   constructor: (@definition) ->
