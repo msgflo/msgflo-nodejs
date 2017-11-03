@@ -2,6 +2,6 @@ try {
   // Compiled JavaScript first
   module.exports = require('./lib/');
 } catch (e) {
-  require('coffee-script/register');
+  require('coffeescript/register');
   module.exports = require('./src/');
 }

@@ -2,3 +2,5 @@
 node_modules/
 .DS_Store
 mosquitto*
+fbp-config.json
+.travis.yml

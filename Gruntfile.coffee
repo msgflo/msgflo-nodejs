@@ -6,6 +6,8 @@ module.exports = ->
     # CoffeeScript compilation
     coffee:
       library:
+        options:
+          bare: true
         expand: true
         cwd: 'src'
         src: ['**.coffee']
@@ -18,6 +20,9 @@ module.exports = ->
         src: ['spec/*.coffee']
         options:
           reporter: 'spec'
+          require: [
+            'coffeescript/register'
+          ]
           grep: process.env.TESTS
 
     # Protocol tests

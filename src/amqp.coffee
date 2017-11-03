@@ -11,7 +11,10 @@ catch e
   amqp = e
 
 class Client extends interfaces.MessagingClient
-  constructor: (@address, @options={}) ->
+  constructor: (address, options={}) ->
+    super address, options
+    @address = address
+    @options = options
     @connection = null
     @channel = null
     @options.prefetch = 2 if not @options.prefetch?
