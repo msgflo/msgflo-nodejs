@@ -1,3 +1,12 @@
+# msgflo-nodejs 0.11.0, 03.11.2017
+
+Breaking changes
+
+* Reqires Node.js 6.0+ for JavaScript ES6 support.
+
+Internal changes
+
+* Update to CoffeeScript 2
 
 # msgflo-nodejs 0.10.0, 15.03.2017
 
