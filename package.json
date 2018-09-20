@@ -14,7 +14,7 @@
   "dependencies": {
     "async": "^2.1.4",
     "chance": "^1.0.4",
-    "coffeescript": "^2.0.2",
+    "coffeescript": "^2.3.2",
     "commander": "^2.6.0",
     "debug": "^3.0.0",
     "fbp": "^1.1.2",
