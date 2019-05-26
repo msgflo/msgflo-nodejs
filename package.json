@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "async": "^2.1.4",
+    "async": "^3.0.1",
     "chance": "^1.0.4",
     "coffeescript": "^2.0.2",
     "commander": "^2.6.0",
