@@ -22,7 +22,7 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "amqplib": "^0.5.1",
+    "amqplib": "^0.5.5",
     "chai": "^4.1.0",
     "grunt": "^1.0.1",
     "grunt-contrib-coffee": "^2.0.0",
