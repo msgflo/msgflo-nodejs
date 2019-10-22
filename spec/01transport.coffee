@@ -118,6 +118,30 @@ transportTests = (type) ->
       clientA.connect (err) ->
         done err
 
+  describe 'sending participant registration message', ->
+    client = null
+    beforeEach (done) ->
+      client = transport.getClient address
+      return client.connect done
+    afterEach (done) ->
+      return client.disconnect done
+
+    it 'should be received by subscribed broker', (done) ->
+      definition =
+        id: '123'
+        role: 'role'
+        component: 'lib/Component'
+        inports: []
+        outports: []
+      onDiscover = (message) ->
+        got = message.data.payload
+        chai.expect(got).to.eql definition
+        return done()
+      broker.subscribeParticipantChange onDiscover, (err) ->
+        return done err if err
+        client.registerParticipant definition, (err) ->
+          return done err if err
+
   describe 'outqueue without subscribers', ->
     it 'sending should not error', (done) ->
       payload = { foo: 'bar91' }

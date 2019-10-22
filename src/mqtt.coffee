@@ -128,9 +128,16 @@ class MessageBroker extends Client
     routing.binderMixin this
 
   # Participant registration
-  subscribeParticipantChange: (handler) ->
+  subscribeParticipantChange: (handler, callback) ->
+    defaultCallback = (err) ->
+      if err
+        console.err "Error in msgflo.mqtt.subscribeParticipantChange, and no callback added", err
+    callback = defaultCallback if not callback
+
     @createQueue '', 'fbp', (err) =>
-      @subscribeToQueue 'fbp', handler, () ->
+      return callback err if err
+      @subscribeToQueue 'fbp', handler, (err) ->
+        return callback err
 
 exports.Client = Client
 exports.MessageBroker = MessageBroker

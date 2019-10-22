@@ -4,6 +4,7 @@ async = require 'async'
 uuid = require 'uuid'
 
 interfaces = require './interfaces'
+uuid = require 'uuid'
 
 try
   amqp = require 'amqplib/callback_api'
@@ -148,10 +149,12 @@ class Client extends interfaces.MessagingClient
       protocol: 'discovery'
       command: 'participant'
       payload: part
-    @channel.assertQueue 'fbp'
-    data = new Buffer JSON.stringify msg
-    @channel.sendToQueue 'fbp', data
-    return callback null
+    exchangeName = 'fbp'
+    @channel.assertExchange exchangeName, 'fanout', {}, (err) =>
+      return callback err if err
+      data = new Buffer JSON.stringify msg
+      @channel.publish exchangeName, '', data
+      return callback null
 
 
 dataSubscriptionQueueName = (id) ->
@@ -281,7 +284,12 @@ class MessageBroker extends Client
     return callback null, subs
 
   # Participant registration
-  subscribeParticipantChange: (handler) ->
+  subscribeParticipantChange: (handler, callback) ->
+    defaultCallback = (err) ->
+      if err
+        console.err "Error in msgflo.amqp.subscribeParticipantChange, and no callback added", err
+    callback = defaultCallback if not callback
+
     deserialize = (message) =>
       debug 'receive on fbp', message.fields.deliveryTag
       data = null
@@ -294,8 +302,17 @@ class MessageBroker extends Client
         data: data
       return handler out
 
-    @channel.assertQueue 'fbp'
-    @channel.consume 'fbp', deserialize
+    exchangeName = 'fbp'
+    @channel.assertExchange exchangeName, 'fanout', {}, (err) =>
+      return callback err if err
+      subscribeQueue = '.fbp-subscribe-' + uuid.v4()
+      @channel.assertQueue subscribeQueue, { persistent: false }, (err) =>
+        return callback err if err
+        @channel.bindQueue subscribeQueue, exchangeName, '', {}, (err) =>
+          return callback err if err
+          @channel.consume subscribeQueue, deserialize
+          debug 'subscribed to', subscribeQueue, exchangeName
+          return callback null
 
 exports.Client = Client
 exports.MessageBroker = MessageBroker
