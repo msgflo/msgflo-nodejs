@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "async": "^2.1.4",
-    "chance": "^1.0.4",
+    "chance": "^1.1.4",
     "coffeescript": "^2.0.2",
     "commander": "^2.6.0",
     "debug": "^4.0.0",
