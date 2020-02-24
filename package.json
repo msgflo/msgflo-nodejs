@@ -19,7 +19,7 @@
     "debug": "^4.0.0",
     "fbp": "^1.1.2",
     "newrelic": "^2.8.0",
-    "uuid": "^3.0.1"
+    "uuid": "^7.0.0"
   },
   "devDependencies": {
     "amqplib": "^0.5.1",
