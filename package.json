@@ -24,7 +24,7 @@
   "devDependencies": {
     "amqplib": "^0.5.1",
     "chai": "^4.1.0",
-    "grunt": "^1.0.1",
+    "grunt": "1.0.4",
     "grunt-contrib-coffee": "^2.0.0",
     "grunt-mocha-test": "^0.13.2",
     "grunt-shell-spawn": "^0.3.1",
